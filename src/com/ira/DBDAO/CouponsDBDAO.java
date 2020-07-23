@@ -14,7 +14,6 @@ import com.ira.beans.Coupon;
 import com.ira.utils.CategoryUtil;
 import com.ira.utils.DateUtil;
 
-
 public class CouponsDBDAO implements CouponsDao {
 
 	private static final String ADD_COUPON_QUERY = "INSERT INTO `couponprojectira`.`coupons` (`COMPANY_ID`, `CATEGORY_ID`, `TITLE`, `DESCRIPTION`, `START_DATE`, `END_DATE`, `AMOUNT`, `PRICE`, `IMAGE`) VALUES ( ?,?,?,?,?,?,?,?,?)";
@@ -25,11 +24,10 @@ public class CouponsDBDAO implements CouponsDao {
 	private static final String ADD_COUPON_PURCHASE_QUERY = "INSERT INTO couponprojectira.coupons ( coupon_id, customer_id ) VALUES (?,?)";
 	private static final String DELETE_COUPON_PURCHASE_QUERY = "DELETE FROM couponprojectira.coupons ( coupon_id, customer_id ) WHERE (id=?)";
 	private static final String IS_COUPON_EXIST_QUERY = "SELECT * FROM couponprojectira.coupons  WHERE title = ? and company_id = ?";
-    private static final String LIST_COUPON_BY_CATEGORY_QUERY = "SELECT *FROM couponprojectira.coupons WHERE (Category_id=?)";
+	private static final String LIST_COUPON_BY_CATEGORY_QUERY = "SELECT *FROM couponprojectira.coupons WHERE (Category_id=?)";
 	private static final String LIST_COUPON_BY_COMPANY_ID_QUERY = "SELECT *FROM couponprojectira.coupons WHERE (company_id = ?)";
 	private static final String GET_ONE_COUPON_BY_ID_CATEGORY_QUERY = "SELECT * FROM couponprojectira.coupons WHERE ID =? AND CATEGORY_ID=?";
-	private static final String LIST_COUPON_BY_CUSTOMER_ID_QUERY = "SELECT *FROM couponprojectira.coupons WHERE (customer_id = ?)";
-
+	
 	@Override
 	public void addCoupon(Coupon coupon) {
 		Connection connection = null;
@@ -105,11 +103,11 @@ public class CouponsDBDAO implements CouponsDao {
 
 	@Override
 	public List<Coupon> getAllCoupons() {
-	
+
 		List<Coupon> coupons = new ArrayList<>();
 		Connection connection = null;
 		try {
-			
+
 			connection = ConnectionPool.getInstance().getConnection();
 			String sql = LIST_COUPON_QUERY;
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -152,7 +150,7 @@ public class CouponsDBDAO implements CouponsDao {
 			ResultSet resultset = statement.executeQuery();
 
 			if (resultset.next()) {
-                coupon = new Coupon();
+				coupon = new Coupon();
 				coupon.setId(resultset.getInt(1));
 				coupon.setcompany_ID(resultset.getInt(2));
 				coupon.setcategory(Category.values()[resultset.getInt(3) - 1]);
@@ -214,8 +212,6 @@ public class CouponsDBDAO implements CouponsDao {
 			ConnectionPool.getInstance().returnConnection(connection);
 		}
 	}
-
-
 
 	/**
 	 * Checks if a coupon exists by title and by company id
@@ -319,51 +315,11 @@ public class CouponsDBDAO implements CouponsDao {
 	}
 
 	/**
-	 * Requesting a coupons by company id 
+	 * Requesting a coupons by company id and category
 	 */
+
 	@Override
-
-	public List<Coupon> getAllCouponsByCompanyId(int company_ID) {
-		List<Coupon> coupons = new ArrayList<Coupon>();
-		Connection connection = null;
-System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+company_ID);
-		try {
-			connection = ConnectionPool.getInstance().getConnection();
-			String sql = LIST_COUPON_BY_COMPANY_ID_QUERY;
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, company_ID);
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-
-				int id = resultSet.getInt(1);
-				int companyID = resultSet.getInt(2);
-				Category category = Category.values()[resultSet.getInt(3) - 1];
-				String title = resultSet.getString(4);
-				String description = resultSet.getString(5);
-				Date start_Date = resultSet.getDate(6);
-				Date end_Date = resultSet.getDate(7);
-				int amount = resultSet.getInt(8);
-				double price = resultSet.getDouble(9);
-				String image = resultSet.getString(10);
-				coupons.add(new Coupon(id, companyID, category, title, description, DateUtil.convertDate(start_Date),
-						DateUtil.convertDate(end_Date), amount, price, image));
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			ConnectionPool.getInstance().returnConnection(connection);
-		}
-	
-		return coupons;
-	}
-
-	/**
-	 *  Requesting a one coupon by coupon id and category 
-	 */
-	@Override
-	public Coupon getOneCoupon(int couponID, Category category) {
+	public Coupon getOneCouponByCouponIdCategory(int couponID, Category category) {
 		Connection connection = null;
 		Coupon coupon = null;
 
@@ -399,6 +355,44 @@ System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+company_ID);
 			ConnectionPool.getInstance().returnConnection(connection);
 		}
 		return coupon;
+
+	}
+
+	@Override
+
+	public List<Coupon> getAllCouponsByCompanyId(int company_ID) {
+		List<Coupon> coupons = new ArrayList<Coupon>();
+		Connection connection = null;
+		try {
+			connection = ConnectionPool.getInstance().getConnection();
+			String sql = LIST_COUPON_BY_COMPANY_ID_QUERY;
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, company_ID);
+			ResultSet resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+
+				int id = resultSet.getInt(1);
+				int companyID = resultSet.getInt(2);
+				Category category = Category.values()[resultSet.getInt(3) - 1];
+				String title = resultSet.getString(4);
+				String description = resultSet.getString(5);
+				Date start_Date = resultSet.getDate(6);
+				Date end_Date = resultSet.getDate(7);
+				int amount = resultSet.getInt(8);
+				double price = resultSet.getDouble(9);
+				String image = resultSet.getString(10);
+				coupons.add(new Coupon(id, companyID, category, title, description, DateUtil.convertDate(start_Date),
+						DateUtil.convertDate(end_Date), amount, price, image));
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			ConnectionPool.getInstance().returnConnection(connection);
+		}
+
+		return coupons;
 	}
 
 	

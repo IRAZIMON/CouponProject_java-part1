@@ -61,6 +61,7 @@ public class CompanyFacade extends ClientFacade {
 		couponsDao = new CouponsDBDAO();
 		tempCoupon = couponsDao.IsCoponExist(coupon.getTitle(), coupon.getcompany_ID());
 		if (!tempCoupon) {
+			coupon.setcompany_ID(companyID);
 			couponsDao.addCoupon(coupon);
 		} else {
 			throw new ExceptionCoupon(coupon.getTitle(), coupon.getcompany_ID(), " already exists");
@@ -70,6 +71,7 @@ public class CompanyFacade extends ClientFacade {
 	public void updateCoupon(Coupon coupon) {
 
 		couponsDao = new CouponsDBDAO();
+		coupon.setcompany_ID(companyID);
 		couponsDao.UpdateCoupon(coupon);
 
 	}
@@ -99,16 +101,15 @@ public class CompanyFacade extends ClientFacade {
 
 			}
 		}
-
 		return couponByCompanyId;
 
 	}
 
 	public List<Coupon> getCompanyCouponsByCategory(Category category) {
-        List<Coupon> couponByCompanyId = new ArrayList<Coupon>();
-        List<Coupon> coupons = couponsDao.getCompanyCouponsByCategory(category);
+		List<Coupon> couponByCompanyId = new ArrayList<Coupon>();
+		List<Coupon> coupons = couponsDao.getCompanyCouponsByCategory(category);
 		for (Coupon coupon : coupons) {
-            if (coupon.getcompany_ID() == companyID) {
+			if (coupon.getcompany_ID() == companyID) {
 				couponByCompanyId.add(coupon);
 			}
 		}
@@ -136,10 +137,9 @@ public class CompanyFacade extends ClientFacade {
 
 	public Company getCompanyDetails(int company_id) {
 		couponsDao = new CouponsDBDAO();
-
 		Company tmpCompany = companiesDao.getOneCompany(company_id);
 		tmpCompany.setCoupons(couponsDao.getAllCouponsByCompanyId(company_id));
-System.out.println("company datails company facade"+tmpCompany);
+
 		return tmpCompany;
 
 	}

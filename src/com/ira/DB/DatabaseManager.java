@@ -86,11 +86,8 @@ public class DatabaseManager {
 	// Create Objects in DB
 	private static void createObjectInDB(String sql) {
 		Connection connection = null;
-		// step 2
 		try {
 			connection = ConnectionPool.getInstance().getConnection();
-			// step 3
-
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.executeUpdate();
 
@@ -98,7 +95,6 @@ public class DatabaseManager {
 			System.out.println(e.getMessage());
 
 		} finally {
-			// step 5
 			ConnectionPool.getInstance().returnConnection(connection);
 
 		}
@@ -107,10 +103,10 @@ public class DatabaseManager {
 	// Drop objects: Table or Schema from DB
 	private static void dropObjectInDB(String objectName, ObjectType MyobjectType) {
 		Connection connection = null;
-		// step 2
+	
 		try {
 			connection = ConnectionPool.getInstance().getConnection();
-			// step 3
+			
 			String drop;
 			if (MyobjectType == ObjectType.Table) {
 				drop = "DROP TABLE IF EXISTS" + "`" + objectName + "`" + ";";
@@ -124,7 +120,7 @@ public class DatabaseManager {
 			System.out.println(e.getMessage());
 
 		} finally {
-			// step 5
+			
 			ConnectionPool.getInstance().returnConnection(connection);
 
 		}

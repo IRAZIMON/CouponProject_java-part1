@@ -1,6 +1,7 @@
 package com.ira.RBAC;
 
 import com.ira.DAO.CompaniesDao;
+
 import com.ira.DAO.CouponsDao;
 import com.ira.DAO.CustomersDao;
 import com.ira.DAO.Customers_vs_couponsDAO;
@@ -40,7 +41,7 @@ public abstract class ClientFacade {
 		this.companiesDao = companiesDao;
 		this.customersDao = customersDao;
 		this.couponsDao = couponsDao;
-		customers_vs_couponsDAO = customers_vs_couponsDAO;
+		this.customers_vs_couponsDAO = customers_vs_couponsDAO;
 	}
 
 	public CompaniesDao getCompaniesDao() {

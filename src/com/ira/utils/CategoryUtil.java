@@ -2,6 +2,7 @@ package com.ira.utils;
 
 import com.ira.beans.Category;
 
+
 public class CategoryUtil {
 
 	public static String CategoryConvert(Category category) {
@@ -15,9 +16,10 @@ public class CategoryUtil {
 			return "RESTAURANT";
 		case VACATION:
 			return "VACATION";
-
+         default:
+        	 return null;
 		}
-		return null;
+		
 	}
 	
 	public static int CategoryConvertString(String category) {
@@ -31,9 +33,11 @@ public class CategoryUtil {
 			return 3;
 		case "VACATION":
 			return 4;
-
+        default :
+        	return -1;
+ 
 		}
-		return 0;
+		
 	}
 	public static int CategoryConvertInt(Category category) {
 
@@ -46,9 +50,10 @@ public class CategoryUtil {
 			return 3;
 		case VACATION:
 			return 4;
-
+         default:
+        	 return -1;
 		}
-		return 0;
+		
 	}
 	
 	

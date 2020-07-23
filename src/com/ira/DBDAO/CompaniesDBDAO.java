@@ -155,12 +155,14 @@ public class CompaniesDBDAO implements CompaniesDao {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setInt(1, companyID);
 			ResultSet resultSet = statement.executeQuery();
-			resultSet.next();
-			int id = resultSet.getInt(1);
-			String name = resultSet.getString(2);
-			String email = resultSet.getString(3);
-			String password = resultSet.getString(4);
-			company = new Company(id, name, email, password);
+			if (resultSet.next())
+			{
+				int id = resultSet.getInt(1);
+				String name = resultSet.getString(2);
+				String email = resultSet.getString(3);
+				String password = resultSet.getString(4);
+				company = new Company(id, name, email, password);
+			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

@@ -28,13 +28,11 @@ public interface CouponsDao {
 
 	List<Coupon> getCompanyCouponsByCategory(Category category);
 
-//	void deleteCouponPurchaseCouponId(int coupon_ID);
-
-    List<Coupon> getAllCouponsByCompanyId(int company_ID);
+	List<Coupon> getAllCouponsByCompanyId(int company_ID);
     
-  
-
-	Coupon getOneCoupon(int couponID, Category category);
+	 Coupon getOneCouponByCouponIdCategory(int couponID, Category category);
+     
+	 
 
 	
 }

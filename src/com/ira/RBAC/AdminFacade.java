@@ -57,24 +57,29 @@ public class AdminFacade extends ClientFacade {
 
 	}
 
-	public void deleteCompany(int company_ID) {
+	public void deleteCompany(int company_ID) throws ExceptionCompany {
 
 		couponsDao = new CouponsDBDAO();
 		customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
 		companiesDao = new CompaniesDBDAO();
 
-		List<Coupon> listCouponsId = couponsDao.getAllCouponsByCompanyId(company_ID);
+		if ((companiesDao.getOneCompany(company_ID)) != null) {
 
-		for (Coupon coupon : listCouponsId) {
-			// step 1=delete all coupon purches
-			customers_vs_couponsDAO.deleteCouponPurchesCouponByID(coupon.getId());
+			List<Coupon> listCouponsId = couponsDao.getAllCouponsByCompanyId(company_ID);
+
+			for (Coupon coupon : listCouponsId) {
+				// step 1=delete all coupon purches
+				customers_vs_couponsDAO.deleteCouponPurchesCouponByID(coupon.getId());
+			}
+			// step 2 =delete all coupons
+			for (Coupon coupon2 : listCouponsId) {
+				couponsDao.deleteCoupon(coupon2.getId());
+			}
+			// Delete company
+			companiesDao.DeleteCompany(company_ID);
+		} else {
+			throw new ExceptionCompany("Company is not exist");
 		}
-		// step 2 =delete all coupons
-		for (Coupon coupon2 : listCouponsId) {
-			couponsDao.deleteCoupon(coupon2.getId());
-		}
-		// Delete company
-		companiesDao.DeleteCompany(company_ID);
 	}
 
 	public List<Company> getAllCompanies() {
@@ -82,24 +87,24 @@ public class AdminFacade extends ClientFacade {
 		List<Company> companies = companiesDao.getAllCompanies();
 		couponsDao = new CouponsDBDAO();
 		for (Company company : companies) {
-			System.out.println("companyid" + company.getId());
-			System.out.println("admin get all" + couponsDao.getAllCouponsByCompanyId(company.getId()));
 			company.setCoupons(couponsDao.getAllCouponsByCompanyId(company.getId()));
 
 		}
-		System.out.println("adminfacade" + companies);
+
 		return companies;
 
 	}
 
-	public Company getOneCompanyById(int company_id) {
+	public Company getOneCompanyById(int company_id)  {
 
 		couponsDao = new CouponsDBDAO();
 
 		Company tmpCompany = companiesDao.getOneCompany(company_id);
 
-		tmpCompany.setCoupons(couponsDao.getAllCouponsByCompanyId(company_id));
-
+		if (tmpCompany != null) {
+			tmpCompany.setCoupons(couponsDao.getAllCouponsByCompanyId(company_id));
+		} 
+		
 		return tmpCompany;
 	}
 
@@ -128,53 +133,67 @@ public class AdminFacade extends ClientFacade {
 		customersDao.updateCustomer(customer);
 	}
 
-	public void deleteCustomer(int customerID) {
+	public void deleteCustomer(int customerID) throws ExceptionCustomer {
 
 		customersDao = new CustomersDBDAO();
-
-		customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
-
-		customers_vs_couponsDAO.deleteCustomerPurchesCouponHistory(customerID);
-		customersDao.deleteCustomer(customerID);
+		
+		if( (customersDao.getOneCustomer(customerID))!=null) 
+		{
+	
+			customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
+	
+			customers_vs_couponsDAO.deleteCustomerPurchesCouponHistory(customerID);
+			customersDao.deleteCustomer(customerID);
+		}
+		else {
+			throw new ExceptionCustomer("Customer is not exist");
+		}
 
 	}
 
-// coupons=null
 	public List<Customer> getAllCustomers() {
+		couponsDao = new CouponsDBDAO();
 		customersDao = new CustomersDBDAO();
 		customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
+
 		List<Customer> customers = customersDao.getAllCustomers();
+
 		List<Coupon> coupons = new ArrayList<Coupon>();
+	
 		for (Customer customer : customers) {
 			List<Integer> tmpCouponsID = customers_vs_couponsDAO.getCouponIdList(customer.getId());
 
 			for (Integer couponID : tmpCouponsID) {
-				coupons.add(couponsDao.getOneCoupon(couponID));
 
+				coupons.add(couponsDao.getOneCoupon(couponID));
 			}
 			customer.setCoupons(coupons);
+
 			coupons.clear();
 		}
+
 		return customers;
+
 	}
 
-//// coupons=null
-	public Customer getOneCustomer(int customer_ID) {
+
+	public Customer getOneCustomer(int customer_ID) throws ExceptionCustomer {
 		CouponsDao couponsDao = new CouponsDBDAO();
 		customersDao = new CustomersDBDAO();
 		Customers_vs_couponsDAO customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
 		List<Coupon> tmpListCoupons = new ArrayList<Coupon>();
 		Customer tmpCustomer = customersDao.getOneCustomer(customer_ID);
-		System.out.println("tmpcustomer"+tmpCustomer);
-		System.out.println("customerid"+customer_ID);
-		List<Integer> couponIdList = customers_vs_couponsDAO.getCouponIdList(tmpCustomer.getId());
-		System.out.println("couponidleast"+couponIdList);
-		for (Integer couponID : couponIdList) {
-			tmpListCoupons.add(couponsDao.getOneCoupon(couponID));
+		if (tmpCustomer!=null)
+		{
+			List<Integer> couponIdList = customers_vs_couponsDAO.getCouponIdList(tmpCustomer.getId());
+			for (Integer couponID : couponIdList) {
+				tmpListCoupons.add(couponsDao.getOneCoupon(couponID));
+			}
+			tmpCustomer.setCoupons(tmpListCoupons);
 		}
-		tmpCustomer.setCoupons(tmpListCoupons);
-		
-		System.out.println("tmpcustomerlist "+tmpListCoupons);
+		else {
+			throw new ExceptionCustomer("Customer is not exist");
+		}
 
 		return tmpCustomer;
 	}

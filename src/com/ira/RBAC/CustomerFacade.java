@@ -1,6 +1,8 @@
 package com.ira.RBAC;
 
 import java.text.ParseException;
+
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import com.ira.DBDAO.CouponsDBDAO;
 import com.ira.DBDAO.CustomersDBDAO;
 import com.ira.DBDAO.Customers_vs_couponsDBDAO;
 import com.ira.Exception.ExceptionCoupon;
+import com.ira.Exception.ExceptionCustomer;
 import com.ira.beans.Category;
 import com.ira.beans.Coupon;
 import com.ira.beans.Customer;
@@ -60,7 +63,6 @@ public class CustomerFacade extends ClientFacade {
 
 			if (tmpcoupon != null) {
 
-				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Date date1 = sdf.parse(LocalDate.now().toString());
 
@@ -107,7 +109,7 @@ public class CustomerFacade extends ClientFacade {
 		return listCoupons;
 	}
 
-	public List<Coupon> getCustomerCoupons(Category category) {
+	public List<Coupon> getCustomerCoupons(Category category)  {
 
 		customers_vs_couponsDAO = new Customers_vs_couponsDBDAO();
 
@@ -119,11 +121,12 @@ public class CustomerFacade extends ClientFacade {
 
 		for (Integer couponID : listCouponsID) {
 
-			Coupon couponCategory = couponsDao.getOneCoupon(couponID, category);
+			Coupon couponCategory = couponsDao.getOneCouponByCouponIdCategory(couponID, category);
 			if (couponCategory != null) {
 
 				listCouponIC.add(couponCategory);
 			}
+			
 
 		}
 
@@ -155,13 +158,12 @@ public class CustomerFacade extends ClientFacade {
 
 	}
 
-	public Customer getCustomerDetails() {
-		
-	
+	public Customer getCustomerDetails()  {
 
 		Customer tmpCustomer = customersDao.getOneCustomer(customerID);
 
 		tmpCustomer.setCoupons(getAllCouponsPurchasCustomer());
+
 		return tmpCustomer;
 
 	}

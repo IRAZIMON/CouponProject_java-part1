@@ -6,7 +6,7 @@ public class ExceptionLogin extends Exception {
 
 	public ExceptionLogin(String email) {
 
-		super("email" + email + "failed . Please try again");
+		super("email " + email + " failed . Please try again");
 
 		this.email = email;
 	}

@@ -36,10 +36,13 @@ public class PrintUtil {
 
 	public static void printCompany(Company company) {
 
-		String[] row = new String[] { String.valueOf(company.getId()), company.getName(), company.getEmail(),
+		if (company != null)
+		{
+		 String[] row = new String[] { String.valueOf(company.getId()), company.getName(), company.getEmail(),
 				(company.getCoupons()).toString() };
 
-		System.out.format("%20s|%20s|%20s%20s\n", row);
+		  System.out.format("%20s|%20s|%20s%20s\n", row);
+		}
 
 	}
 
@@ -54,10 +57,11 @@ public class PrintUtil {
 	}
 
 	public static void printCustomer(Customer customer) {
-
+		
+		
         String[] row = new String[] { String.valueOf(customer.getId()), customer.getFirstName(), customer.getLastName(),
-				customer.getLastName(),customer.getCoupons().toString() };
-		System.out.format("%20s|%20s|%20s|%20s|%20s\n", row);
+				customer.getEmail(),customer.getLastName(),customer.getCoupons().toString() };
+		System.out.format("%20s|%20s|%20s|%20s|%20s|%20s\n", row);
 
 	}
 
@@ -72,16 +76,6 @@ public class PrintUtil {
 
 	}
 
-//	public static List <Customer> PrintCustomerVsCoupons(List<Customer>customers,List<Coupon>coupons) {
-//		for (Customer customer : customers) {
-//			//customer.setCoupons(printCoupons(coupons));
-//		}
-//	}
-
-//	public static void printCustomerVsCouponHeader() {
-//		String[] header = new String[] { "CUSTOMER_ID", "COUPON_ID"};
-//		System.out.format("%20s|%20s\n", header);
-//	}
 
 	public static void printCustomerHeader() {
 		String[] header = new String[] { "ID", "FIRST_NAME", "LAST_NAME", "EMAIL", "COUPONS_LIST" };
