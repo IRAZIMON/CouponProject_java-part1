@@ -1,10 +1,10 @@
 MySql Workbeanch local host :  3306  ,username : root ,password : ip200683
 
-Project name CouponProjectIra
+Project name : CouponProjectIra
 
-Shema name  couponprojectira
+Shema name : couponprojectira
 
-Main Package  com.ira .
+Main Package : com.ira .
 
 | Client| Email | Password |
 | ------ | ------ | ------ |
@@ -21,8 +21,8 @@ Main Package  com.ira .
 | Company 5  |  EL-AL@gmail.com| 79087 |
 
 
-Table Names  Coupons Customers Categories Companies Customers_vs_coupons
+Table Names : Coupons Customers Categories Companies Customers_vs_coupons
 
 Extra :  salt +hush
 
-GitHub Link :
+GitHub Link : https://github.com/IRAZIMON/Couponproject_Ira
