@@ -1,6 +1,6 @@
 MySql Workbeanch local host :  3306  ,username : root ,password : ip200683
 
-Project name : CouponProjectIra
+Project name : CouponSystem_java-part1
 
 Shema name : couponprojectira
 
