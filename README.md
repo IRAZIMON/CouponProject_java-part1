@@ -25,4 +25,4 @@ Table Names : Coupons Customers Categories Companies Customers_vs_coupons
 
 Extra :  salt +hush
 
-GitHub Link : https://github.com/IRAZIMON/Couponproject_Ira
+GitHub Link :https://github.com/IRAZIMON/CouponProject_java-part1.git
